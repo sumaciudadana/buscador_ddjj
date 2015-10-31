@@ -1,0 +1,104 @@
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:tx="http://www.springframework.org/schema/tx"
+	xmlns:context="http://www.springframework.org/schema/context"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans 
+http://www.springframework.org/schema/beans/spring-beans-3.0.xsd 
+http://www.springframework.org/schema/tx 
+http://www.springframework.org/schema/tx/spring-tx-3.0.xsd 
+http://www.springframework.org/schema/context 
+http://www.springframework.org/schema/context/spring-context-3.0.xsd">
+
+
+	<context:annotation-config />
+	<context:component-scan base-package="org.sumaciudadana.affidavit" />
+
+
+	<!-- BEANS -->
+	<bean id="AffidavitUtils" class="org.sumaciudadana.affidavit.util.AffidavitUtils" />
+	<bean id="affidavitService"
+		class="org.sumaciudadana.affidavit.service.AffidavitServiceImpl" />
+	<bean id="pservantService" class="org.sumaciudadana.affidavit.service.PServantServiceImpl" />
+	<bean id="statisticService"
+		class="org.sumaciudadana.affidavit.service.StatisticServiceImpl" />
+	<bean id="belongingService"
+		class="org.sumaciudadana.affidavit.service.BelongingServiceImpl" />
+	<bean id="loginService" class="org.sumaciudadana.affidavit.service.LoginServiceImpl" />
+
+	<!--#Configuración del servicio de Spring: MailSernder -->
+	<bean id="mailSender" class="org.springframework.mail.javamail.JavaMailSenderImpl">
+		<property name="host" value="${mail.host}" />
+		<property name="port" value="${mail.port}" />
+		<property name="username" value="${mail.username}" />
+		<property name="password" value="${mail.password}" />
+		<property name="defaultEncoding" value="UTF-8" />
+	</bean>
+
+	<!-- Login configuration -->
+	<bean id="loginDAO" class="org.sumaciudadana.affidavit.DAO.LoginDAOImpl"/>
+
+	<!--#Configuración de nuestro servicio:MailService -->
+	<bean id="mailService" class="org.sumaciudadana.affidavit.service.MailServiceImpl">
+		<property name="active" value="true" />
+		<property name="mailSender" ref="mailSender" />
+		<property name="from" value="sumaciudadana.denuncias@gmail.com" />
+	</bean>
+
+	<!--#lectura del fichero administrable -->
+	<bean id="propertyConfigurer"
+		class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer">
+		<property name="ignoreUnresolvablePlaceholders">
+			<value>true</value>
+		</property>
+		<property name="locations">
+			<list>
+				<value>classpath:app.properties</value>
+			</list>
+		</property>
+	</bean>
+
+	<!-- Data Source Declaration -->
+	<bean id="dataSource" class="com.mchange.v2.c3p0.ComboPooledDataSource"
+		destroy-method="close">
+		<property name="driverClass" value="com.mysql.jdbc.Driver" />
+		<!-- <property name="jdbcUrl" value="jdbc:mysql://ec2-75-101-156-134.compute-1.amazonaws.com:3306/sumaciudadana" 
+			/> -->
+		<!-- <property name="user" value="sumaciudadana" /> -->
+		<!-- <property name="password" value="ciudadanasuma" /> -->
+		<property name="jdbcUrl" value="jdbc:mysql://localhost:3306/sumaciudadana" />
+		<property name="user" value="root" />
+		<property name="password" value="root" />
+		<property name="maxPoolSize" value="10" />
+		<property name="maxStatements" value="0" />
+		<property name="minPoolSize" value="5" />
+	</bean>
+
+	<!-- Session Factory Declaration -->
+	<bean id="sessionFactory"
+		class="org.springframework.orm.hibernate4.LocalSessionFactoryBean">
+		<property name="dataSource" ref="dataSource" />
+		<property name="packagesToScan">
+			<list>
+				<value>org.sumaciudadana.affidavit.entity</value>
+			</list>
+		</property>
+		<property name="hibernateProperties">
+			<props>
+				<prop key="hibernate.dialect">org.hibernate.dialect.MySQLDialect</prop>
+				<prop key="hibernate.show_sql">false</prop>
+				<prop key="hibernate.temp.use_jdbc_metadata_defaults">false</prop>
+				<!-- disable the invocationtargetexception of the app boot -->
+			</props>
+		</property>
+	</bean>
+
+	<!-- Enable the configuration of transactional behavior based on annotations -->
+	<tx:annotation-driven transaction-manager="txManager" />
+
+	<!-- Transaction Manager is defined -->
+	<bean id="txManager"
+		class="org.springframework.orm.hibernate4.HibernateTransactionManager">
+		<property name="sessionFactory" ref="sessionFactory" />
+	</bean>
+
+
+</beans>

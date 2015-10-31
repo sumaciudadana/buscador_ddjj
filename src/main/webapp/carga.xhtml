@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:f="http://java.sun.com/jsf/core">
+<h:head>
+	<title>Carga de archivo de datos</title>
+	<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1" />
+	<link type="text/css" rel="stylesheet"
+		href="${request.contextPath}/css/style.css" />
+</h:head>
+<h:body>
+
+	<div id="container">
+		<div id="backBtn">
+			<h:form id="formRedirectTop">
+				<p:commandButton action="/index.xhtml?faces-redirect=true"
+					value="Regresar a la pagina de inicio" ajax="false" />
+			</h:form>
+		</div>
+		<h:form id="loadForm" enctype="multipart/form-data">
+			<p:panel header="Control de archivos de base de datos"
+				styleClass="addPanel">
+				<p:messages autoUpdate="true" showDetail="true" closable="true" />
+				<h:panelGrid columns="2" width="60%">
+					<h:outputLabel value="Archivo a subir:" for="txtFile" />
+					<p:fileUpload value="#" mode="simple" skinSimple="true"
+						allowTypes="" invalidFileMessage="" invalidSizeMessage=""
+						label="Seleccionar" required="" requiredMessage="" sizeLimit="" />
+					<p:commandButton value="Enviar" ajax="false" action="#" />
+				</h:panelGrid>
+
+				<p:panelGrid styleClass="summary">
+					<f:facet name="header">
+						<p:row>
+							<p:column colspan="4">
+								<h:outputText value="Historial" />
+							</p:column>
+						</p:row>
+					</f:facet>
+					<p:row>
+						<p:column>
+							<h:outputText
+								value="nombre de archivo: municipalidades ddjj 23-09-13" />
+						</p:column>
+						<p:column>
+							<h:outputText value="peso: 456 KB" />
+						</p:column>
+						<p:column>
+							<h:outputText value="Fecha: 28/08/2015" />
+						</p:column>
+						<p:column>
+							<p:link value="Restaurar" href="#" />
+						</p:column>
+					</p:row>
+				</p:panelGrid>
+			</p:panel>
+		</h:form>
+
+<!-- 		<p:treeTable value="#{categoryCRUD.root}" var="cat" -->
+<!-- 			styleClass="categoryList" id="categoryTree"> -->
+<!-- 			<f:facet name="header">Listado de categorias</f:facet> -->
+<!-- 			<p:column> -->
+<!-- 				<f:facet name="header"> -->
+<!-- 					<h:outputText value="Categoria" /> -->
+<!-- 				</f:facet> -->
+<!-- 				<h:outputText value="#{cat.name}" /> -->
+<!-- 			</p:column> -->
+<!-- 		</p:treeTable> -->
+	</div>
+</h:body>
+</html>

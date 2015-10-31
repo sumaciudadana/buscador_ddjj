@@ -1,0 +1,339 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" 
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:c="http://java.sun.com/jsp/jstl/core">
+
+<h:head>
+	<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1" />
+	<link type="text/css" rel="stylesheet"
+		href="${request.contextPath}/css/style.css" />
+
+	<script type="text/javascript" src="${request.contextPath}/js/suma.js" />
+	<script type="text/javascript"
+		src="${request.contextPath}/js/markerclusterer.js"></script>
+	<script type="text/javascript"
+		src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCq8rqxcmEADbGzL5tPTIqvu4mnQXyAw5c&amp;sensor=false">
+		
+	</script>
+
+	<style type="text/css">
+#map-canvas {
+	height: 500px;
+	width: 500px;
+}
+</style>
+
+	<script type="text/javascript">
+		function updateAutocomplete() {
+			var checkElement = document.forms['criteriaForm']['criteriaForm:chkAll_input'];
+			var autocompleteElement = document.forms['criteriaForm']['criteriaForm:txtName_input'];
+
+			if (checkElement.checked == true) {
+				autocompleteElement.value = '';
+				autocompleteElement.disabled = true;
+			} else {
+				autocompleteElement.disabled = false;
+			}
+		}
+
+		function initialize() {
+			var mapOptions = {
+				center : new google.maps.LatLng(-12.101827, -77.025321),
+				zoom : 16,
+				mapTypeId : google.maps.MapTypeId.ROADMAP
+			};
+			var map = new google.maps.Map(
+					document.getElementById("map-canvas"), mapOptions);
+
+			var markers = [];
+
+			// test
+			var latLng = new google.maps.LatLng(-12.101827, -77.025321);
+			var marker = new google.maps.Marker({
+				'position' : latLng
+			});
+			markers.push(marker);
+			var marker = new google.maps.Marker({
+				'position' : latLng
+			});
+			markers.push(marker);
+			var marker = new google.maps.Marker({
+				'position' : latLng
+			});
+			markers.push(marker);
+			var marker = new google.maps.Marker({
+				'position' : latLng
+			});
+			markers.push(marker);
+			var marker = new google.maps.Marker({
+				'position' : latLng
+			});
+			markers.push(marker);
+			var marker = new google.maps.Marker({
+				'position' : latLng
+			});
+			markers.push(marker);
+			var marker = new google.maps.Marker({
+				'position' : latLng
+			});
+			markers.push(marker);
+			var marker = new google.maps.Marker({
+				'position' : latLng
+			});
+			markers.push(marker);
+			var marker = new google.maps.Marker({
+				'position' : latLng
+			});
+			markers.push(marker);
+			// end test
+
+			var markerCluster = new MarkerClusterer(map, markers);
+		}
+		google.maps.event.addDomListener(window, 'load', initialize);
+	</script>
+
+</h:head>
+
+<h:body>
+
+	<div id="container">
+		<!-- ###  Header  ### -->
+		<div id="header">
+			<div style="padding-top: 20px;">
+				<h1>
+					<div style="float: left">
+						<img src="img/alert.gif" />
+					</div>
+					<a href="#">Integridad.pe</a>
+				</h1>
+				<p>Fiscalizaci&oacute;n ciudadana de los funcionarios
+					p&uacute;blicos</p>
+			</div>
+		</div>
+
+		<div id="contentcontainer">
+			<div id="content">
+
+				<h:form id="criteriaForm">
+
+					<p:fieldset
+						legend="Busqueda personalizada (por nombre y apellido del alcalde o alcaldesa)"
+						style="margin-bottom: 30px;">
+						<h:panelGrid columns="2" columnClasses="colStyle1,colStyle2">
+							<h:outputLabel
+								value="Apellidos y nombres del alcalde o alcaldesa:"
+								for="txtName" />
+							<p:autoComplete id="txtName" widgetVar="txtName"
+								completeMethod="#{statistics.completeServant}" maxResults="10"
+								minQueryLength="1" var="sug" queryDelay="0"
+								value="#{statistics.selectedServant}"
+								itemLabel="#{sug.serFullName}" itemValue="#{sug}"
+								converter="pservantConverter" />
+						</h:panelGrid>
+
+					</p:fieldset>
+
+					<p:fieldset legend="B&uacute;squeda general (todos los alcaldes)">
+						<h:panelGrid columns="2" columnClasses="colStyle1,colStyle2">
+							<h:outputLabel value="Todos los alcaldes" for="chkAll" />
+							<p:selectBooleanCheckbox value="#{statistics.checkAll}"
+								id="chkAll" widgetVar="chkAll"
+								onchange="javascript:updateAutocomplete();" />
+						</h:panelGrid>
+					</p:fieldset>
+
+
+					<br />
+					<br />
+
+					<h:panelGrid columns="2" columnClasses="colStyle1,colStyle2">
+						<h:outputText value="#{msgs.query_cmb_label}" />
+						<p:selectOneMenu value="#{statistics.formPage}">
+							<f:selectItem itemValue="dummy"
+								itemLabel="--Seleccione una opci&oacute;n--" />
+							<f:selectItem itemValue="affidavit"
+								itemLabel="Incumplimiento de declaraciones" />
+							<f:selectItem itemValue="patrimony"
+								itemLabel="% incremento o decrecimiento del patrimonio durante la gesti&oacute;n" />
+							<f:selectItem itemValue="income"
+								itemLabel="% incremento o decrecimiento de ingresos durante la gesti&oacute;n" />
+							<f:selectItem itemValue="wealth"
+								itemLabel="Bienes de mayor valor" />
+							<f:selectItem itemValue="mapBelong"
+								itemLabel="Mapa de bienes de todos los funcionarios" />
+							<p:ajax update="include" />
+						</p:selectOneMenu>
+					</h:panelGrid>
+
+
+					<br />
+					<br />
+
+					<h:panelGroup id="include">
+						<ui:include src="pages/statistics/#{statistics.formPage}.xhtml" />
+					</h:panelGroup>
+
+					<p:commandButton value="Buscar"
+						actionListener="#{statistics.showStats}" ajax="false"
+						update=":resultForm" />
+				</h:form>
+
+				<br /> <br />
+
+				<h:form id="resultForm">
+					<p:growl id="growl" showDetail="true" />
+
+					<!-- Statistics start -->
+					<h:panelGroup id="breachesPanel" rendered="#{statistics.breaches}">
+						<p:dataTable value="#{statistics.affiFaultList}" var="fault"
+							paginator="true" rows="20" id="resultTable"
+							widgetVar="resultTable" sortBy="#{fault.namePservant}"
+							sortOrder="ascending">
+							<f:facet name="header">Resultado</f:facet>
+							<p:column sortBy="#{fault.namePservant}">
+								<f:facet name="header">Funcionario</f:facet>
+								<h:outputText value="#{fault.namePservant}" />
+							</p:column>
+							<p:column sortBy="#{fault.faultPorcent}">
+								<f:facet name="header">Porcentaje de falta</f:facet>
+								<h:outputText value="#{fault.faultPorcentMsg}%" />
+							</p:column>
+							<p:column>
+								<p:commandLink value="Detalle" oncomplete="affiDlg.show();"
+									actionListener="#{statistics.viewDetail(fault.idPservant)}"
+									update=":resultForm:affiDetail" />
+							</p:column>
+						</p:dataTable>
+
+						<p:dialog widgetVar="affiDlg" id="affiDlg" visible="true"
+							header="#{statistics.selectedServant.serFullName}">
+							<p:dataTable value="#{statistics.detailAffis}" var="affi"
+								id="affiDetail">
+								<p:column>
+									<f:facet name="header">A&ntilde;o</f:facet>
+									<h:outputText value="#{affi.affiYear}" />
+								</p:column>
+								<p:column>
+									<f:facet name="header">Oportunidad</f:facet>
+									<h:outputText value="#{affi.presentationName}" />
+								</p:column>
+								<p:column>
+									<f:facet name="header">Valor de patrimonio</f:facet>
+									<h:outputText value="#{affi.affiTotalWealth}">
+										<f:convertNumber type="currency" currencySymbol="S/." />
+									</h:outputText>
+								</p:column>
+							</p:dataTable>
+						</p:dialog>
+					</h:panelGroup>
+
+					<h:panelGroup id="salIncrementPanel" rendered="#{statistics.salaryIncrement}">
+						<p:dataTable id="salIncTable"
+							value="#{statistics.incomeIncrement}" var="inc" paginator="true"
+							rows="30" sortBy="#{inc.pservant.serFullName}"
+							sortOrder="ascending">
+							<f:facet name="header">Incremento de ingresos mensuales</f:facet>
+							<p:column sortBy="#{inc.pservant.serFullName}">
+								<f:facet name="header">Funcionario</f:facet>
+								<h:outputText value="#{inc.pservant.serFullName}" />
+							</p:column>
+							<p:column sortBy="#{inc.salIncAmount}">
+								<f:facet name="header">Porcentaje de incremento de ingresos</f:facet>
+								<h:outputText value="#{inc.incomeIncrement}" />
+							</p:column>
+						</p:dataTable>
+					</h:panelGroup>
+
+					<h:panelGroup id="patIncrementPanel" rendered="#{statistics.patrimonyIncrement}">
+						<p align="justify">NOTA 1: El c&aacute;lculo se realiza
+							tomando en cuenta la primera declaraci&oacute;n jurada registrada
+							por la CGR o la municipalidad y la &uacute;ltima
+							declaraci&oacute;n jurada registrada por CGR o la municipalidad
+							correspondiente, durante todos los a&ntilde;os de gesti&oacute;n
+							del alcalde o la alcaldesa.</p>
+						<p align="justify">NOTA 2: En caso la CGR o la Municipalidad
+							registre dos declaraciones juradas presentadas el en el mismo
+							a&ntilde;o, para hacer el calculo se toma en consideracion la que
+							registra mayor valor.</p>
+						<p:dataTable id="patIncTable"
+							value="#{statistics.belongIncrement}" var="bel" paginator="true"
+							rows="30" sortBy="#{bel.pservant.serFullName}"
+							sortOrder="ascending">
+							<f:facet name="header">Incremento de patrimonio</f:facet>
+							<p:column sortBy="#{bel.pservant.serFullName}">
+								<f:facet name="header">Funcionario</f:facet>
+								<h:outputText value="#{bel.pservant.serFullName}" />
+							</p:column>
+							<p:column sortBy="#{bel.patIncAmount}">
+								<f:facet name="header">Porcentaje de incremento patrimonial</f:facet>
+								<h:outputText value="#{bel.patrimonyIncrement}" />
+							</p:column>
+						</p:dataTable>
+					</h:panelGroup>
+
+					<h:panelGroup id="maxBelongPanel" rendered="#{statistics.wealth}">
+						<p:dataTable id="belongTable" value="#{statistics.maxBelong}"
+							var="bel">
+							<f:facet name="header">Bienes registrados o registrables seg&uacute;n el valor declarado (se obvia el registro 'otros')</f:facet>
+							<p:column>
+								<f:facet name="header">Bien</f:facet>
+								<h:outputText value="#{bel.belongingType.desBelongingType}" />
+							</p:column>
+							<p:column>
+								<f:facet name="header">Valor</f:facet>
+								<h:outputText value="#{bel.valueBelonging}">
+									<f:convertNumber type="currency" currencySymbol="S/." />
+								</h:outputText>
+							</p:column>
+							<p:column>
+								<f:facet name="header">Funcionario</f:facet>
+								<h:outputText value="#{bel.affidavit.pservant.serFullName}" />
+							</p:column>
+						</p:dataTable>
+					</h:panelGroup>
+
+					<h:panelGroup id="mapPanel" rendered="#{statistics.mapBelong}">
+						<div id="textoMapa" style="margin: 0 auto;">
+							<h2>Explicaci&oacute;n del mapa</h2>
+							<p>
+								Este mapa muestra los bienes declarados por <strong>todos
+									los funcionarios</strong> representados en un mapa dinamico.
+							</p>
+							<p>Para poder salvaguardar la privacidad de los funcionarios,
+								Las direcciones de los bienes en el mapa equivalen a las mismas
+								de las municipalidades correspondientes al distrito del bien.</p>
+						</div>
+						<div id="map-canvas" style="margin: 0 auto;" />
+					</h:panelGroup>
+					<!-- Statistics end -->
+					
+					<p:separator id="separator"
+						style="margin-top:80px;margin-bottom:80px;" />
+
+					<h:panelGroup id="affiFaulCharttPanel" rendered="true">
+						<p:chart type="pie" model="#{statistics.pieModel}" id="custom"
+							style="width:400px;height:300px;margin: 0 auto;"></p:chart>
+					</h:panelGroup>
+				</h:form>
+			</div>
+
+			<!-- ### Sidebar ### -->
+			<div id="sidebar">
+				<ui:include src="pages/sidebar.xhtml"></ui:include>
+			</div>
+		</div>
+
+		<div id="footer">
+			<p>
+				Copyright &copy; 2012 <a href="http://www.sumaciudadana.org">sumaciudadana.org</a><br />
+			</p>
+		</div>
+	</div>
+
+</h:body>
+</html>

@@ -1,0 +1,104 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" 
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:c="http://java.sun.com/jsp/jstl/core">
+
+<h:head>
+	<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1" />
+	<link type="text/css" rel="stylesheet"
+		href="${request.contextPath}/css/style.css" />
+</h:head>
+
+<h:body>
+
+	<div id="container">
+
+		<!-- ###  Header  ### -->
+
+		<div id="header">
+
+			<div style="padding-top: 20px;">
+				<h1>
+					<div style="float: left">
+						<img src="img/alert.gif" />
+					</div>
+					<a href="#">Integridad.pe</a>
+				</h1>
+				<p>Fiscalización ciudadana de los funcionarios públicos</p>
+			</div>
+		</div>
+		<div id="contentcontainer">
+
+			<div id="content">
+
+				<!-- ### Post Entry Begin ###  -->
+
+				<div class="post">
+					<h2>Fuente oficial</h2>
+					<br/>
+					<p>FUENTE OFICIAL DEL ARCHIVO DE DECLARACIONES JURADAS DE INGRESOS, BIENES Y RENTAS DE LOS ALCALDES Y LAS ALCALDESAS PROVINCIALES Y DISTRITALES DE LIMA.</p>
+					<p><u>ADVERTENCIA AL LECTOR:</u> DADO QUE SUMA CIUDADANA ESTÁ DIFUNDIENDO ESTA INFORMACIÓN DE MANERA MASIVA, LA ORGANIZACIÓN HA CREIDO CONVENIENTE OCULTAR ALGUNOS DATOS PATRIMONIALES QUE PERMITEN SU IDENTIFICACIÓN Y UBICACIÓN EXACTA.</p>
+					<p><u>LISTA DE DOCUMENTOS:</u></p>
+					<ol>
+						<li>
+							<p>Lista de todas las declaraciones juradas de ingresos, bienes y rentas de los alcaldes y alcaldesas distritales y metropolitanos de Lima, realizadas entre 2003 y 2012, entregadas al requirente por la Contraloría General de la República.</p>
+							<p>Link: <h:outputLink onclick="window.open('http://issuu.com/sumaciudadana/docs/01_lista_de_municipalidades_distritales'); return false">ACCEDA AL DOCUMENTO OFICIAL</h:outputLink></p>
+						</li>
+						<li>
+							<p>Declaraciones juradas de ingresos, bienes y rentas de los alcaldes y las alcaldesas de los distritos de Ancón, Ate, Barranco, Breña, Carabayllo, Cieneguilla, Comas, Chaclacayo, Chorrillos, El Agustino e Independencia.</p>
+							<p>Link: <h:outputLink onclick="window.open('http://issuu.com/sumaciudadana/docs/01_ancon_independencia'); return false">ACCEDA AL DOCUMENTO OFICIAL</h:outputLink></p>
+						</li>
+						<li>
+							<p>Declaraciones juradas de ingresos, bienes y rentas de los alcaldes y alcaldesas de los distritos de Jesús María, La Molina, La Victoria, Lince, Los Olivos y Lurigancho-Chosica.</p>
+							<p>Link: <h:outputLink onclick="window.open('http://issuu.com/sumaciudadana/docs/03_jesus-maria_luri-chosica'); return false">ACCEDA AL DOCUMENTO OFICIAL</h:outputLink></p>
+						</li>
+						<li>
+							<p>Declaraciones juradas de ingresos, bienes y rentas de los alcaldes y las alcaldesas de los distritos de Lurín, Magdalena del Mar, Miraflores, Pachacamac, Pucusana, Pueblo Libre, Puente Piedra, Punta Hermosa, Punta Negra, Rimac, San Bartolo, San Borja y San Isidro. </p>
+							<p>Link: <h:outputLink onclick="window.open('http://issuu.com/sumaciudadana/docs/04_lurin_san-isidro'); return false">ACCEDA AL DOCUMENTO OFICIAL</h:outputLink></p>
+						</li>
+						<li>
+							<p>Declaraciones juradas de ingresos, bienes y rentas de los alcaldes y las alcaldesas de los distritos de San Juan de Lurigancho, San Juan de Miraflores, San Luis, San Martín de Porres y San Miguel.</p>
+							<p>Link: <h:outputLink onclick="window.open('http://issuu.com/sumaciudadana/docs/05_s.j.luri__san-miguel'); return false">ACCEDA AL DOCUMENTO OFICIAL</h:outputLink></p>
+						</li>
+						<li>
+							<p>Declaraciones juradas de ingresos, bienes y rentas de los alcaldes y las alcaldesas de los distritos de Santa Anita, y Santiago de Surco.</p>
+							<p>Link: <h:outputLink onclick="window.open('http://issuu.com/sumaciudadana/docs/06_sta-anita__surco'); return false">ACCEDA AL DOCUMENTO OFICIAL</h:outputLink></p>
+						</li>
+						<li>
+							<p>Declaraciones juradas de ingresos, bienes y rentas de los alcaldes y las alcaldesas de los distritos de Surquillo, Villa El Salvador y Villa María del Triunfo.</p>
+							<p>Link: <h:outputLink onclick="window.open('http://issuu.com/sumaciudadana/docs/07_surquillo__v.m.triunfo'); return false">ACCEDA AL DOCUMENTO OFICIAL</h:outputLink></p>
+						</li>
+						<li>
+							<p>Declaraciones juradas de ingresos, bienes y rentas de los alcaldes y la alcaldesa de la Municipalidad Metropolitana de Lima.</p>
+							<p>Link: <h:outputLink onclick="window.open('http://issuu.com/sumaciudadana/docs/08_municipalidad_metropolitana_de_lima'); return false">ACCEDA AL DOCUMENTO OFICIAL</h:outputLink></p>
+						</li>
+					</ol>
+				</div>
+				
+			</div>
+
+			<!-- ### Sidebar ### -->
+			<div id="sidebar">
+				<ui:include src="pages/sidebar.xhtml"></ui:include>
+			</div>
+
+		</div>
+
+		<!-- ### Footer ### -->
+
+		<div id="footer">
+			<p>
+				Copyright &copy; 2012 <a href="http://www.sumaciudadana.org">sumaciudadana.org</a><br />
+			</p>
+
+		</div>
+	</div>
+
+
+</h:body>
+</html>

@@ -1,0 +1,99 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" 
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:c="http://java.sun.com/jsp/jstl/core">
+
+<h:head>
+	<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1" />
+	<link type="text/css" rel="stylesheet"
+		href="${request.contextPath}/css/style.css" />
+	<script type="text/javascript">
+		function processSubmit(idpservant) {
+			processFormUser([{name: 'idpservant', value: idpservant}]);
+		}
+	</script>
+</h:head>
+
+<h:body>
+	<f:event type="javax.faces.event.PreRenderViewEvent"
+		listener="#{affidavitQuery.preRenderView}" /> 
+	<div class="wrap">
+		<h:form id="form">
+
+			
+			<p:panel header="Consulta por criterios de b&uacute;squeda:" id="criteria" styleClass="mainPanel">
+				<p:messages autoUpdate="true" showDetail="true" id="messages" />
+				<h:panelGrid columns="2" cellpadding="5" id="display">
+
+					<h:outputLabel value="Apellidos y nombres del alcalde o alcaldesa:" for="txtName" />
+					<h:panelGroup>
+						<p:autoComplete id="txtName" widgetVar="txtName"
+							completeMethod="#{affidavitQuery.completeServant}" maxResults="10"
+							minQueryLength="1" var="sug" queryDelay="0"
+							value="#{affidavitQuery.selectedServant}"
+							itemLabel="#{sug.serFullName}" itemValue="#{sug}"
+							converter="pservantConverter" />
+					</h:panelGroup>
+
+
+					<h:outputLabel value="Municipalidad:" for="cmbMuni" />
+					<p:selectOneMenu id="cmbMuni"
+						value="#{affidavitQuery.selectedMunicipality.idmunicipality}" style="width: 200px;">
+						<f:selectItem itemLabel="TODOS" itemValue="0" />
+						<f:selectItems value="#{affidavitQuery.municipalities}" var="mun"
+							itemLabel="#{mun.munName }" itemValue="#{mun.idmunicipality }" />
+					</p:selectOneMenu>
+
+					<h:outputLabel value="Valor del patrimonio declarado a la CGR:" />
+					<p:selectOneMenu id="cmbWealth"
+						value="#{affidavitQuery.wealthRange}" style="width: 200px;">
+						<f:selectItem itemLabel="TODOS" itemValue="RANGO0" />
+						<f:selectItem itemLabel="S/. 0 a S/. 50,000" itemValue="RANGO1" />
+						<f:selectItem itemLabel="S/. 50,001 a S/. 250,000"
+							itemValue="RANGO2" />
+						<f:selectItem itemLabel="S/. 250,001 a S/. 500,000"
+							itemValue="RANGO3" />
+						<f:selectItem itemLabel="S/. 500,001 a S/. 1'000,000"
+							itemValue="RANGO4" />
+						<f:selectItem itemLabel="S/. 1'000,001 a S/. 5'000,000"
+							itemValue="RANGO5" />
+						<f:selectItem itemLabel="S/. 5'000,001 a más" itemValue="RANGO6" />
+					</p:selectOneMenu>
+				</h:panelGrid>
+			</p:panel>
+
+			<p:commandButton value="Buscar"
+				action="#{affidavitQuery.searchAffidavit}" ajax="false"
+				styleClass="btnBuscar" icon="ui-icon-search" update="modalDialog" />
+
+			<p:dialog id="modalDialog" header="Seleccione un funcionario"
+				widgetVar="dlg2" modal="true" height="350" width="600"
+				visible="#{affidavitQuery.showModal}">
+				<p:dataTable id="resultServants"
+					value="#{affidavitQuery.selectedServants}" var="ser">
+					<p:column headerText="Apellidos y nombres">
+						<h:outputText value="#{ser.serFullName}" />
+					</p:column>
+
+					<p:column>
+						<p:commandButton ajax="true"
+							onclick="processSubmit(#{ser.idpservant});"
+							styleClass="btnBuscar" icon="ui-icon-search">
+						</p:commandButton>
+					</p:column>
+				</p:dataTable>
+
+				<p:remoteCommand name="processFormUser" process="@form"
+					action="#{affidavitQuery.selectPservant}">
+				</p:remoteCommand>
+			</p:dialog>
+		</h:form>
+	</div>
+
+</h:body>
+</html>

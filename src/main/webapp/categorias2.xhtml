@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:f="http://java.sun.com/jsf/core">
+<h:head>
+	<title>Login administrador</title>
+	<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1" />
+	<link type="text/css" rel="stylesheet"
+		href="${request.contextPath}/css/style.css" />
+</h:head>
+<h:body>
+
+	<div id="container">
+		<h:form id="inputForm">
+
+			<p:panel header="Mantenimiento de categorias" styleClass="addPanel">
+				<p:messages autoUpdate="true" showDetail="true" closable="true" />
+				<h:panelGrid columns="2" width="60%">
+					<h:outputLabel value="Nombre" for="txtCategoria" />
+					<p:inputText id="txtCategoria" value="#{categoryCRUD.categoryName}"
+						style="width:190px;" />
+					<h:outputLabel value="Dependencia padre"
+						for="selectParentDependency" />
+					<h:panelGroup>
+						<p:selectOneMenu id="selectParentDependency" style="width: 200px;"
+							value="#{categoryCRUD.selectedParentCategory}">
+							<f:selectItem itemLabel="NINGUNA" itemValue="0" />
+							<f:selectItems value="#{categoryCRUD.categories}" var="cat"
+								itemLabel="#{cat.name}" itemValue="#{cat.idCategory}" />
+						</p:selectOneMenu>
+						<p:graphicImage id="helperParent" value="img/tooltip_icon.jpg"
+							style="margin-left:10px;" />
+						<p:tooltip for="helperParent"
+							value="#{msgs.tooltip_dependency_parent}"/>
+					</h:panelGroup>
+					<h:outputLabel value="Dependencia hija" for="selectDependency" />
+					<h:panelGroup>
+						<p:selectOneMenu id="selectDependency" style="width: 200px;"
+							value="#{categoryCRUD.selectedUnderCategory}">
+							<f:selectItem itemLabel="NINGUNA" itemValue="0" />
+							<f:selectItems value="#{categoryCRUD.categories}" var="cat"
+								itemLabel="#{cat.name }" itemValue="#{cat.idCategory}" />
+						</p:selectOneMenu>
+						<p:graphicImage id="helperDependency" value="img/tooltip_icon.jpg"
+							style="margin-left:10px;" />
+						<p:tooltip for="helperDependency"
+							value="#{msgs.tooltip_dependency_child}"/>
+					</h:panelGroup>
+				</h:panelGrid>
+				<p:commandButton value="Agregar"
+					action="#{categoryCRUD.addCategory}" ajax="true"
+					update="selectDependency selectParentDependency :listForm:categoryTree" />
+			</p:panel>
+		</h:form>
+		<h:form id="listForm">
+			<p:treeTable value="#{categoryCRUD.root}" var="cat"
+				styleClass="categoryList" id="categoryTree">
+				<f:facet name="header">Arbol de categorias</f:facet>
+				<p:column>
+					<f:facet name="header">
+						<h:outputText value="Categoria" />
+					</f:facet>
+					<h:outputText value="#{cat.name}" />
+				</p:column>
+				<p:column style="width:20%;">
+					<f:facet name="header">Accion</f:facet>
+					<h:outputText value="Eliminar" />
+					<p:commandButton id="btnDelete" icon="ui-icon-trash"
+						title="Eliminar" action="#{categoryCRUD.deleteCategory}"
+						ajax="false" style="margin-left:10px;">
+						<f:setPropertyActionListener
+							target="#{categoryCRUD.deleteCategory}" value="#{cat}"></f:setPropertyActionListener>
+					</p:commandButton>
+				</p:column>
+			</p:treeTable>
+		</h:form>
+	</div>
+</h:body>
+</html>

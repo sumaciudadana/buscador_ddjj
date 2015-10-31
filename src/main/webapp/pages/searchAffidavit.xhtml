@@ -1,0 +1,501 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" 
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:c="http://java.sun.com/jsp/jstl/core"
+	xmlns:fn="http://java.sun.com/jsp/jstl/functions">
+
+<h:head>
+	<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1" />
+
+	<link type="text/css" rel="stylesheet"
+		href="${request.contextPath}/css/style.css" />
+	<script type="text/javascript" src="https://www.google.com/jsapi"></script>
+	<script type="text/javascript" src="${request.contextPath}/js/suma.js" />
+	<script type="text/javascript"
+		src="${request.contextPath}/js/markerclusterer.js"></script>
+	<script type="text/javascript"
+		src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCq8rqxcmEADbGzL5tPTIqvu4mnQXyAw5c&amp;sensor=false" />
+
+	<style type="text/css">
+#map-canvas {
+	height: 500px;
+	width: 500px;
+}
+</style>
+
+</h:head>
+
+<h:body>
+	<div class="wrapBuscador">
+
+		<h:panelGrid columns="1" width="100%">
+			<h:panelGroup>
+				<h:panelGrid columns="2" width="100%">
+					<h:form id="formRedirectTop">
+						<p:commandButton action="/index.xhtml?faces-redirect=true"
+							value="Regresar a la página de inicio" ajax="false" />
+					</h:form>
+					<p:commandButton value="Haga una denuncia an&oacute;nima"
+						styleClass="btnDenuncia"
+						onclick="javascript:showPopup('${request.contextPath}/faces/pages/denuncia.xhtml',630,660)"
+						ajax="true" type="button" />
+				</h:panelGrid>
+			</h:panelGroup>
+			<h:panelGrid styleClass="serData">
+				<h:outputText
+					value="#{affidavitQuery.selectedServant.serFirstsurname} #{affidavitQuery.selectedServant.serSecondsurname}, #{affidavitQuery.selectedServant.serName}" />
+
+				<a href="#"
+					onclick="
+				    window.open(
+				      'http://www.facebook.com/sharer.php?s=100&amp;p[url]=#{fn:replace(request.requestURL, request.requestURI, '')}#{request.contextPath}/faces/pages/searchAffidavit.xhtml?servantId=#{affidavitQuery.selectedServant.idpservant}&amp;p[title]=Integridad.pe&amp;p[summary]=Fiscalizacion ciudadana de los funcionarios publicos&amp;p[images][0]=http://integridad.pe:8080/suma/img/alert.gif', 
+				      'facebook-share-dialog', 
+				      'width=626,height=436'); 
+				    return false;">
+					<img src="#{request.contextPath}/img/compartir.png"
+					alt="Compartir en facebook" />
+				</a>
+
+				<a href="https://twitter.com/share" class="twitter-share-button"
+					data-url="http://integridad.pe/suma/funcionario/#{affidavitQuery.selectedServant.idpservant}"
+					data-text="Fiscalizaci&oacute;n ciudadana de los funcionarios p&uacute;blicos - #{affidavitQuery.selectedServant.serFullName}">
+					Tweet </a>
+				<script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?'http':'https';if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+'://platform.twitter.com/widgets.js';fjs.parentNode.insertBefore(js,fjs);}}(document, 'script', 'twitter-wjs');</script>
+
+			</h:panelGrid>
+		</h:panelGrid>
+
+		<p:fieldset>
+			<div id="chart_div" style="width: 750px; height: 415px;"></div>
+		</p:fieldset>
+
+		<!-- Accordion with affidavit results, one tab per year -->
+		<p:accordionPanel styleClass="affidavitResult">
+			<c:forEach items="#{affidavitQuery.affidavits}" var="res"
+				varStatus="theCount">
+				<p:tab title="#{res.affiYear }: #{res.title}">
+
+					<p:panelGrid style="margin: 0 auto 0 auto; width: 100%;">
+						<f:facet name="header">
+							<p:row>
+								<p:column colspan="4">Resumen de la declaración jurada</p:column>
+							</p:row>
+							<p:row>
+								<p:column>Rubros declarados</p:column>
+								<p:column>Sector público</p:column>
+								<p:column>Sector privado</p:column>
+								<p:column>Total</p:column>
+							</p:row>
+						</f:facet>
+						<p:row>
+							<p:column>
+								<h:outputText value="Ingresos mensuales" />
+								<div style="float: right;">
+									<h:outputLink id="ingresosMensuales${theCount.index}" value="#">
+										<h:outputText value="¿Qué es esto?" />
+									</h:outputLink>
+									<p:tooltip for="ingresosMensuales${theCount.index}"
+										showEffect="fade" hideEffect="fade">
+										<p>Se debe declarar de acuerdo con las normas de la CGR:</p>
+										<ol>
+											<li>
+												<div class="tooltipDiv">
+													<h:outputText
+														value="En el sector público: remuneración bruta mensual del alcalde." />
+												</div>
+											</li>
+											<br />
+											<li>
+												<div class="tooltipDiv">
+													<h:outputText
+														value="En el sector privado: ingresos brutos calculados mensualmente por renta, actividad profesional o comercial, dividendos, intereses, dietas, etc. originados en el Perú y en el extranjero." />
+												</div>
+											</li>
+										</ol>
+									</p:tooltip>
+								</div>
+							</p:column>
+							<p:column style="text-align:right">
+								<h:outputText value="${res.affiPublicIncome }">
+									<f:convertNumber pattern="#,###,###" locale="US" />
+								</h:outputText>
+							</p:column>
+							<p:column style="text-align:right">
+								<h:outputText value="${res.affiPrivateIncome }">
+									<f:convertNumber pattern="#,###,###" locale="US" />
+								</h:outputText>
+							</p:column>
+							<p:column style="text-align:right">
+								<h:outputText value="${res.affiTotalMonthWealth}">
+									<f:convertNumber pattern="#,###,###" locale="US" />
+								</h:outputText>
+							</p:column>
+						</p:row>
+						<p:row>
+							<p:column>
+								<h:outputText value="Bienes" />
+								<div style="float: right;">
+									<h:outputLink id="tooltipBienes${theCount.index}" value="#">
+										<h:outputText value="¿Qué es esto?" />
+									</h:outputLink>
+									<p:tooltip for="tooltipBienes${theCount.index}"
+										showEffect="fade" hideEffect="fade">
+										<p>Se debe declarar de acuerdo con las normas de la CGR:</p>
+										<ol>
+											<li>
+												<div class="tooltipDiv">
+													<h:outputText
+														value="Bienes Inmuebles registrados y no registrados, propiedad del alcalde, de su cónyuge o conviviente, y producto del matrimonio o convivencia acreditada, ubicados en el Perú y el extranjero, como casas, terrenos, departamentos, estacionamientos, locales, depósitos, predios rurales, etc." />
+												</div>
+											</li>
+											<br />
+											<li>
+												<div class="tooltipDiv">
+													<h:outputText
+														value="Bienes muebles registrados y no registrados, propiedad del alcalde, de su cónyuge o conviviente, y producto del matrimonio o convivencia acreditada, ubicados en el Perú y el extranjero, como autos, obras de arte, joyas, barcos, aviones, acciones, patentes, etc." />
+												</div>
+											</li>
+										</ol>
+									</p:tooltip>
+								</div>
+							</p:column>
+							<p:column colspan="2" />
+							<p:column style="text-align:right">
+								<h:outputText value="${res.affiTotalBelong}">
+									<f:convertNumber pattern="#,###,###" locale="US" />
+								</h:outputText>
+							</p:column>
+						</p:row>
+						<p:row>
+							<p:column>
+								<h:outputText value="Otros" />
+								<div style="float: right;">
+									<h:outputLink id="tooltipOtros${theCount.index}" value="#">
+										<h:outputText value="¿Qué es esto?" />
+									</h:outputLink>
+									<p:tooltip for="tooltipOtros${theCount.index}"
+										showEffect="fade" hideEffect="fade">
+										<p>Se debe declarar de acuerdo con las normas de la CGR:</p>
+										<ol>
+											<li>
+												<div class="tooltipDiv">
+													<h:outputText
+														value="Ahorros, colocaciones, depósitos, inversiones en el Sistema Financiero del alcalde, de su cónyuge o conviviente, y producto del matrimonio o convivencia acreditada, ubicados en el Perú y el extranjero." />
+												</div>
+											</li>
+											<br />
+											<li>
+												<div class="tooltipDiv">
+													<h:outputText
+														value="Ingresos del alcalde, de su cónyuge o conviviente, y producto del matrimonio o convivencia acreditada, que no son de periodicidad mensual, en el Perú y el extranjero, como bonificaciones (gratificaciones, productividad), ventas, donaciones, herencias, legados, premios, etc. También en este rubro sólo el declarante debe consignar créditos a su favor, y deudas a su cargo, y el número de personas a su cargo." />
+												</div>
+											</li>
+										</ol>
+									</p:tooltip>
+								</div>
+							</p:column>
+							<p:column style="text-align:right">
+								<h:outputText value="${res.affiOtherPublicIncome }">
+									<f:convertNumber pattern="#,###,###" locale="US" />
+								</h:outputText>
+							</p:column>
+							<p:column style="text-align:right">
+								<h:outputText value="${res.affiOtherPrivateIncome }">
+									<f:convertNumber pattern="#,###,###" locale="US" />
+								</h:outputText>
+							</p:column>
+							<p:column style="text-align:right">
+								<h:outputText value="${res.affiTotalOtherIncome}">
+									<f:convertNumber pattern="#,###,###" locale="US" />
+								</h:outputText>
+							</p:column>
+						</p:row>
+					</p:panelGrid>
+
+					<br />
+
+					<p:dataTable value="#{res.belongingsNormal }" var="bel"
+						sortBy="#{bel.desBelonging }" sortOrder="descending"
+						emptyMessage="#{msgs.wealth_empty}">
+						<f:facet name="header">Detalle de bienes</f:facet>
+						<p:column>
+							<f:facet name="header">Tipo</f:facet>
+							<h:outputText value="#{bel.desBelonging }" />
+						</p:column>
+						<p:column>
+							<f:facet name="header">Descripci&oacute;n</f:facet>
+							<h:outputText value="#{bel.belongingType.desBelongingType }" />
+						</p:column>
+						<p:column>
+							<f:facet name="header">Detalle</f:facet>
+							<h:outputText value="#{bel.detailBelonging }" />
+						</p:column>
+						<p:column>
+							<f:facet name="header">Fuente</f:facet>
+							<h:outputText value="#{bel.belongingSource }" />
+						</p:column>
+						<p:column style="text-align:right">
+							<f:facet name="header">Valor (S/.)</f:facet>
+							<h:outputText value="#{bel.valueBelonging }">
+								<f:convertNumber pattern="#,###,###" locale="US" />
+							</h:outputText>
+						</p:column>
+						<f:facet name="footer">
+							<div style="float: right;">
+								<h:outputText value="Total de Bienes: S/. " />
+								<h:outputText value="${res.affiTotalBelong}">
+									<f:convertNumber pattern="#,###,###" locale="US" />
+								</h:outputText>
+							</div>
+						</f:facet>
+					</p:dataTable>
+
+					<br />
+
+					<p:dataTable value="#{res.belongingsOther }" var="bel"
+						sortBy="#{bel.desBelonging }" sortOrder="descending"
+						emptyMessage="#{msgs.other_empty}">
+						<f:facet name="header">Detalle de otros</f:facet>
+						<p:column>
+							<f:facet name="header">Tipo</f:facet>
+							<h:outputText value="#{bel.belongingType.desBelongingType }" />
+						</p:column>
+						<p:column>
+							<f:facet name="header">Detalle</f:facet>
+							<h:outputText value="#{bel.detailBelonging }" />
+						</p:column>
+						<p:column>
+							<f:facet name="header">Fuente</f:facet>
+							<h:outputText value="#{bel.belongingSource }" />
+						</p:column>
+						<p:column style="text-align:right">
+							<f:facet name="header">Valor (S/.)</f:facet>
+							<h:outputText value="#{bel.valueBelonging }">
+								<f:convertNumber pattern="#,###,###" locale="US" />
+							</h:outputText>
+						</p:column>
+						<f:facet name="footer">
+							<div style="float: right;">
+								<h:outputText value="Total de Otros: S/. " />
+								<h:outputText value="${res.affiTotalOtherIncome}">
+									<f:convertNumber pattern="#,###,###" locale="US" />
+								</h:outputText>
+							</div>
+						</f:facet>
+					</p:dataTable>
+
+					<br />
+
+					<h:panelGrid columns="2">
+						<h:outputText
+							value="Total del valor del patrimonio declarado (bienes+otros): S/. "
+							style="font-weight: bold;" />
+						<h:outputText value="#{res.affiTotalWealth }"
+							style="font-weight: bold;">
+							<f:convertNumber pattern="#,###,###" locale="US" />
+						</h:outputText>
+					</h:panelGrid>
+
+				</p:tab>
+			</c:forEach>
+		</p:accordionPanel>
+		<!-- Accordion end -->
+
+		<!-- Advance search integration -->
+		<p:separator id="separator"
+			style="margin-top:40px;margin-bottom:40px;" />
+		<p align="justify">NOTA 1: El c&aacute;lculo se realiza tomando en
+			cuenta la primera declaraci&oacute;n jurada registrada por la CGR o
+			la municipalidad y la &uacute;ltima declaraci&oacute;n jurada
+			registrada por CGR o la municipalidad correspondiente, durante todos
+			los a&ntilde;os de gesti&oacute;n del alcalde o la alcaldesa.</p>
+		<p align="justify">NOTA 2: En caso la CGR o la Municipalidad
+			registre dos declaraciones juradas presentadas el en el mismo
+			a&ntilde;o, para hacer el calculo se toma en consideracion la que
+			registra mayor valor.</p>
+
+		<div id="advanceSearchSummary">
+			<p:panelGrid styleClass="summary">
+				<f:facet name="header">
+					<p:row>
+						<p:column colspan="2">
+							<h:outputText
+								value="Resumen estadistico de #{affidavitQuery.selectedServant.serFullName}" />
+						</p:column>
+					</p:row>
+				</f:facet>
+				<p:row>
+					<p:column>
+						<h:outputText value="Incumplimiento de declaraciones" />
+					</p:column>
+					<p:column>
+						<h:outputText value="#{affidavitQuery.affiFault.faultPorcentMsg}%" />
+					</p:column>
+				</p:row>
+				<p:row>
+					<p:column>
+						<h:outputText value="Incremento de ingresos mensuales" />
+					</p:column>
+					<p:column>
+						<h:outputText
+							value="#{affidavitQuery.incomeIncrement.incomeIncrement}" />
+					</p:column>
+				</p:row>
+				<p:row>
+					<p:column>
+						<h:outputText value="Incremento de patrimonio" />
+					</p:column>
+					<p:column>
+						<h:outputText
+							value="#{affidavitQuery.belongIncrement.patrimonyIncrement}" />
+					</p:column>
+				</p:row>
+				<p:row>
+					<p:column rowspan="2">
+						<h:outputText value="Bien de mayor valor declarado" />
+					</p:column>
+					<p:column>
+						<h:outputText
+							value="Bien: #{affidavitQuery.maxBelong.belongingType.desBelongingType}" />
+					</p:column>
+				</p:row>
+				<p:row>
+					<p:column>
+						<h:outputText value="Valor: #{affidavitQuery.maxBelong.valueBelonging}">
+							<f:convertNumber type="currency" currencySymbol="S/." />
+						</h:outputText>
+					</p:column>
+				</p:row>
+			</p:panelGrid>
+
+			<h:panelGroup id="mapPanel" style="margin-top:50px;">
+				<div id="textoMapa" style="margin: 0 auto;">
+					<h2>Explicaci&oacute;n del mapa</h2>
+					<p>
+						Este mapa muestra los bienes declarados por <strong>todos
+							los funcionarios</strong> representados en un mapa dinamico.
+					</p>
+					<p>Para poder salvaguardar la privacidad de los funcionarios,
+						Las direcciones de los bienes en el mapa equivalen a las mismas de
+						las municipalidades correspondientes al distrito del bien.</p>
+				</div>
+				<div id="map-canvas" style="margin: 0 auto;" />
+			</h:panelGroup>
+		</div>
+		<!-- Advance search end -->
+
+		<h:panelGrid columns="2" width="100%" style="margin-top: 15px;">
+			<h:form id="formRedirect">
+				<p:commandButton action="/index.xhtml?faces-redirect=true"
+					value="Regresar a la página de inicio" ajax="false" />
+			</h:form>
+			<p:commandButton value="Haga una denuncia anónima"
+				styleClass="btnDenuncia"
+				onclick="javascript:showPopup('pages/denuncia.xhtml',630,660)"
+				ajax="true" type="button" />
+		</h:panelGrid>
+	</div>
+
+	<!-- SCRIPTS -->
+	<script language="JavaScript" type="text/javascript">
+		var dataString = "#{affidavitQuery.dataChart }";
+		console.log('data:'+dataString);
+		google.load("visualization", "1", {
+			packages : [ "corechart" ]
+		});
+
+		google.setOnLoadCallback(drawChart);
+		function drawChart() {
+
+			///////////////////////////
+			var data = getTableData(dataString);
+
+			///////////////////////////
+			var options = {
+				title : 'Valor del patrimonio declarado anualmente (bienes + otros)',
+				hAxis : {
+					title : 'Fuente',
+					titleTextStyle : {
+						color : 'red'
+					}
+				},
+				legend : {
+					position : 'bottom',
+					alignment : 'center'
+				},
+				vAxis : {
+					format : 'S/ #,###.##',
+					baseline : 0
+				}
+			};
+
+			var chart = new google.visualization.ColumnChart(document
+					.getElementById('chart_div'));
+			chart.draw(data, options);
+		}
+		
+		
+		/* MAP CODE */
+		function initialize() {
+			var mapOptions = {
+				center : new google.maps.LatLng(-12.101827, -77.025321),
+				zoom : 16,
+				mapTypeId : google.maps.MapTypeId.ROADMAP
+			};
+			var map = new google.maps.Map(
+					document.getElementById("map-canvas"), mapOptions);
+
+			var markers = [];
+
+			// test
+			var latLng = new google.maps.LatLng(-12.101827, -77.025321);
+			var marker = new google.maps.Marker({
+				'position' : latLng
+			});
+			markers.push(marker);
+			var marker = new google.maps.Marker({
+				'position' : latLng
+			});
+			markers.push(marker);
+			var marker = new google.maps.Marker({
+				'position' : latLng
+			});
+			markers.push(marker);
+			var marker = new google.maps.Marker({
+				'position' : latLng
+			});
+			markers.push(marker);
+			var marker = new google.maps.Marker({
+				'position' : latLng
+			});
+			markers.push(marker);
+			var marker = new google.maps.Marker({
+				'position' : latLng
+			});
+			markers.push(marker);
+			var marker = new google.maps.Marker({
+				'position' : latLng
+			});
+			markers.push(marker);
+			var marker = new google.maps.Marker({
+				'position' : latLng
+			});
+			markers.push(marker);
+			var marker = new google.maps.Marker({
+				'position' : latLng
+			});
+			markers.push(marker);
+			// end test
+
+			var markerCluster = new MarkerClusterer(map, markers);
+		}
+		google.maps.event.addDomListener(window, 'load', initialize);
+	</script>
+
+</h:body>
+</html>
