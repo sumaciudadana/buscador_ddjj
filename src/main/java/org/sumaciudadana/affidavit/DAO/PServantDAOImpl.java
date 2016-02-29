@@ -36,6 +36,7 @@ public class PServantDAOImpl implements PServantDAO {
 	public Pservant getServantById(int pservantid) {
 		Session session = sessionFactory.getCurrentSession();
 		Pservant pservant = (Pservant) session.get(Pservant.class, pservantid);
+		LOGGER.info("pservant loaded: "+pservant.getIdpservant());
 		return pservant;
 	}
 
@@ -79,6 +80,24 @@ public class PServantDAOImpl implements PServantDAO {
 		Criteria criteria = sessionFactory.openSession().createCriteria(
 				Pservant.class);
 		try {
+			result = criteria.list();
+		} catch (Exception e) {
+			LOGGER.log(Level.SEVERE, "Error listing servants", e);
+		}
+		return result;
+	}
+	
+	@SuppressWarnings("unchecked")
+	public List<Pservant> getServantByPosition(int position){
+		// THIS METHOD DOESNT WORK
+		List<Pservant> result = null;
+		Criteria criteria = sessionFactory.openSession().createCriteria(
+				Pservant.class);
+		try {
+			criteria.createAlias("affidavits", "affi");
+			criteria.createAlias("affi.idposition", "pos");
+			criteria.add(Restrictions.eq("pos.idposition", position));
+			criteria.setResultTransformer(Criteria.DISTINCT_ROOT_ENTITY);
 			result = criteria.list();
 		} catch (Exception e) {
 			LOGGER.log(Level.SEVERE, "Error listing servants", e);

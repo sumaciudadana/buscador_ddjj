@@ -1,6 +1,8 @@
 package org.sumaciudadana.affidavit.DAO;
 
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 import org.hibernate.Criteria;
 import org.hibernate.SessionFactory;
@@ -14,6 +16,9 @@ import org.sumaciudadana.affidavit.entity.Affidavit;
 
 @Repository
 public class AffidavitDAOImpl implements AffidavitDAO {
+	
+	private static final Logger LOGGER = Logger.getLogger(AffidavitDAOImpl.class
+			.getName());
 
 	@Autowired
 	private SessionFactory sessionFactory;
@@ -189,4 +194,41 @@ public class AffidavitDAOImpl implements AffidavitDAO {
 		affidavits = criteria.list();
 		return affidavits;
 	}
+	
+	@SuppressWarnings("unchecked")
+	public List<Affidavit> getAffidavitByPosition(int idposition){
+		LOGGER.info("parameter position: "+idposition);
+		List<Affidavit> response = null;
+		try {
+			Criteria criteria = sessionFactory.getCurrentSession().createCriteria(
+					Affidavit.class);
+			if (idposition!=0) {
+				criteria.add(Restrictions.eq("position.idposition", idposition));
+			}
+			criteria.setResultTransformer(Criteria.DISTINCT_ROOT_ENTITY);
+			response = criteria.list();
+			LOGGER.info("response size: "+response.size());
+		} catch (Exception e) {
+			LOGGER.log(Level.SEVERE, "Error listing servants", e);
+		}
+		return response;
+	}
+
+	@Override
+	public Affidavit getLastAffiByPresentation(String presentation, int pservant) {
+		Affidavit result = null;
+		try {
+			Criteria criteria = sessionFactory.getCurrentSession().createCriteria(
+					Affidavit.class);
+			criteria.add(Restrictions.eq("affiPresentation", presentation));
+			criteria.add(Restrictions.eq("pservant.idpservant", pservant));
+			criteria.addOrder(Order.desc("affiYear"));
+			criteria.setMaxResults(1);
+			result = (Affidavit) criteria.uniqueResult();
+		} catch (Exception e) {
+			LOGGER.log(Level.SEVERE, "error loading affidavit by presentation",e);
+		}
+		return result;
+	}
+
 }

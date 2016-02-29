@@ -7,5 +7,6 @@ import org.sumaciudadana.affidavit.entity.Belonging;
 public interface BelongingService {
 	
 	public List<Belonging> getAllBelongings();
+	public String getMapData(int idpservant);
 
 }

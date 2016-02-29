@@ -40,9 +40,8 @@ public class PServantServiceImpl implements PServantService {
 		return pservantDAO.getServantByCategory(category);
 	}
 
-//	@Override
-//	public List<Pservant> getServantByCatMun(int category, int municipality) {
-//		return pservantDAO.getServantByCatMun(category, municipality);
-//	}
-
+	@Override
+	public List<Pservant> getServantByPosition(int position) {
+		return pservantDAO.getServantByPosition(position);
+	}
 }

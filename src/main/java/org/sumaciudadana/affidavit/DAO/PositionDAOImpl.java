@@ -37,6 +37,7 @@ public class PositionDAOImpl implements PositionDAO {
 	public List<Jurisdiction> getJurisdiction(Organization org) {
 		List<Jurisdiction> result = null;
 		int idOrg = org.getIdOrganization();
+		//LOGGER.info("organization: "+idOrg);
 		try {
 			Criteria criteria = sessionFactory.getCurrentSession().createCriteria(
 					Jurisdiction.class);
@@ -55,6 +56,7 @@ public class PositionDAOImpl implements PositionDAO {
 	public List<Position> getPositions(Jurisdiction jurisdiction) {
 		List<Position> result = null;
 		int jurId = jurisdiction.getIdJurisdiction();
+		//LOGGER.info("jurisdiction: "+jurId);
 		try {
 			Criteria criteria = sessionFactory.getCurrentSession().createCriteria(
 					Position.class);

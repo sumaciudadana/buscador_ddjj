@@ -26,6 +26,7 @@
 		<h:form id="form">
 			<p:panel header="Consulta por criterios de b&uacute;squeda:"
 				id="criteria" styleClass="mainPanel">
+				<p:messages autoUpdate="true" showDetail="true" id="messages" />
 				<p:panelGrid columns="2">
 
 					<p:outputLabel value="Entidad:" for="cmbEntidad" />
@@ -39,7 +40,7 @@
 					</p:selectOneMenu>
 
 					<p:outputLabel value="Jurisdiccion" for="cmbJurisdiccion" />
-					<p:selectOneMenu id="cmbJurisdiccion" style="width:300px;" 
+					<p:selectOneMenu id="cmbJurisdiccion" style="width:300px;"
 						value="#{affidavitQuery.selectedJurisdiction.idJurisdiction}"
 						valueChangeListener="#{affidavitQuery.jurisdictionChangeListener}">
 						<f:selectItem itemLabel="TODAS" itemValue="0" />
@@ -49,10 +50,13 @@
 					</p:selectOneMenu>
 
 					<p:outputLabel value="cargo" for="cmbCargo" />
-					<p:selectOneMenu id="cmbCargo" style="width:300px;">
+					<p:selectOneMenu id="cmbCargo" style="width:300px;"
+						value="{#affidavitQuery.selectedPosition.idposition}"
+						valueChangeListener="#{affidavitQuery.cargoChangeListener}">
 						<f:selectItem itemLabel="TODAS" itemValue="0" />
 						<f:selectItems value="#{affidavitQuery.positions}" var="pos"
 							itemLabel="#{pos.posName}" itemValue="#{pos.idposition}" />
+						<p:ajax event="change" update="modalDialog" />
 					</p:selectOneMenu>
 
 					<h:outputLabel value="Apellidos y nombres del alcalde o alcaldesa:"
@@ -66,13 +70,11 @@
 							converter="pservantConverter" />
 					</h:panelGroup>
 
-					<p:commandButton value="Buscar"
+					<p:commandButton value="Buscar por nombre"
 						action="#{affidavitQuery.searchByServant}" ajax="false"
 						styleClass="btnBuscar" icon="ui-icon-search" update="modalDialog" />
 				</p:panelGrid>
-				
-				
-				
+
 
 				<p:dialog id="modalDialog" header="Seleccione un funcionario"
 					widgetVar="dlg2" modal="true" height="350" width="600"

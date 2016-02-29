@@ -1,5 +1,6 @@
 package org.sumaciudadana.affidavit.DAO;
 
+import java.io.Serializable;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -11,7 +12,13 @@ import org.springframework.stereotype.Repository;
 import org.sumaciudadana.affidavit.entity.User;
 
 @Repository
-public class LoginDAOImpl implements LoginDAO {
+public class LoginDAOImpl implements LoginDAO, Serializable {
+
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = -1519066970717777665L;
+	
 
 	private final static Logger LOGGER = Logger.getLogger(LoginDAOImpl.class
 			.getName());
@@ -40,6 +47,24 @@ public class LoginDAOImpl implements LoginDAO {
 		}
 
 		return false;
+	}
+
+	public User userExists(String username) {
+		try {
+			User user = null;
+			Criteria criteria = sessionFactory.getCurrentSession()
+					.createCriteria(User.class);
+			criteria.add(Restrictions.eq("username", username));
+			user = (User) criteria.uniqueResult();
+
+			if (user != null) {
+				return user;
+			}
+		} catch (Exception e) {
+			LOGGER.log(Level.SEVERE, "Error logging user " + username, e);
+		}
+
+		return null;
 	}
 
 }

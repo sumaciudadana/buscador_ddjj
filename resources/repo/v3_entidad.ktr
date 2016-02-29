@@ -1,3 +1,4 @@
+<?xml version="1.0" encoding="UTF-8"?>
 <transformation>
   <info>
     <name>v3_entidad</name>
@@ -68,7 +69,7 @@
   <created_user>-</created_user>
   <created_date>2015&#x2f;09&#x2f;30 00&#x3a;03&#x3a;21.022</created_date>
   <modified_user>-</modified_user>
-  <modified_date>2015&#x2f;10&#x2f;28 23&#x3a;25&#x3a;53.682</modified_date>
+  <modified_date>2015&#x2f;11&#x2f;12 00&#x3a;38&#x3a;55.513</modified_date>
     <key_for_session_key>H4sIAAAAAAAAAAMAAAAAAAAAAAA&#x3d;</key_for_session_key>
     <is_key_private>N</is_key_private>
   </info>
@@ -182,7 +183,22 @@
         <length>-2</length>
         <precision>-2</precision>
       </field>        <select_unspecified>N</select_unspecified>
-    </fields>     <cluster_schema/>
+      <meta>        <name>ENTIDAD</name>
+        <rename>ENTIDAD</rename>
+        <type>String</type>
+        <length>-2</length>
+        <precision>-2</precision>
+        <conversion_mask/>
+        <date_format_lenient>false</date_format_lenient>
+        <date_format_locale/>
+        <date_format_timezone/>
+        <lenient_string_to_number>false</lenient_string_to_number>
+        <encoding>UTF-8</encoding>
+        <decimal_symbol/>
+        <grouping_symbol/>
+        <currency_symbol/>
+        <storage_type/>
+      </meta>    </fields>     <cluster_schema/>
  <remotesteps>   <input>   </input>   <output>   </output> </remotesteps>    <GUI>
       <xloc>325</xloc>
       <yloc>147</yloc>
@@ -211,13 +227,13 @@
     <sheetfield/>
     <filefield/>
     <limit>0</limit>
-    <encoding/>
+    <encoding>UTF-8</encoding>
     <add_to_result_filenames>Y</add_to_result_filenames>
     <accept_filenames>N</accept_filenames>
     <accept_field/>
     <accept_stepname/>
     <file>
-      <name>C&#x3a;&#x5c;Users&#x5c;Cesar&#x5c;Desktop&#x5c;DDJJS DATOS FALSOS.xls</name>
+      <name>&#x2f;home&#x2f;ubuntu&#x2f;suma&#x2f;files&#x2f;&#x24;&#x7b;INPUTFILE&#x7d;.xls</name>
       <filemask/>
       <exclude_filemask/>
       <file_required>N</file_required>

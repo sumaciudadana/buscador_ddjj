@@ -18,6 +18,8 @@ public interface AffidavitDAO {
 	public long getInvalidAffi(int idpservant);
 
 	public List<Affidavit> getAffidavitQuery(int pservant);
+	public List<Affidavit> getAffidavitByPosition(int idposition);
 
+	public Affidavit getLastAffiByPresentation(String presentation, int pservant);
 
 }

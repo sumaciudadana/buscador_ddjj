@@ -26,23 +26,21 @@
 				<li><h:link outcome="statistics">B&uacute;squeda avanzada</h:link></li>
 				<li><h:link outcome="fuente">Fuente oficial</h:link></li>
 				<li><a href="#">Datos abiertos</a></li>
-				<li><h:link outcome="login">Ingreso</h:link></li>
 			</ul>
 		</li>
 		<li>
 			<h2>Session</h2>
 			<ul>
-				<li>
-					<h:form id="SessionForm">
+				<li><h:link outcome="login">Ingreso</h:link></li>
+				<li><h:form id="SessionForm">
 						<p:commandLink actionListener="#{loginBean.logout}" ajax="false">
 							<h:outputText value="Cerrar sesi&oacute;n" />
 						</p:commandLink>
-					</h:form>
-				</li>
+					</h:form></li>
 			</ul>
 		</li>
 		<li>
-			<h2>Enlaces de interés</h2> <ui:include src="banners.xhtml"></ui:include>
+			<h2>Enlaces de inter&eacute;s</h2> <ui:include src="banners.xhtml"></ui:include>
 		</li>
 	</ul>
 

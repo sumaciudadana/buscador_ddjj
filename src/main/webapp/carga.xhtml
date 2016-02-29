@@ -1,4 +1,6 @@
-<!DOCTYPE html>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" 
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
 <html xmlns="http://www.w3.org/1999/xhtml"
 	xmlns:h="http://java.sun.com/jsf/html"
 	xmlns:p="http://primefaces.org/ui"
@@ -21,52 +23,55 @@
 		<h:form id="loadForm" enctype="multipart/form-data">
 			<p:panel header="Control de archivos de base de datos"
 				styleClass="addPanel">
-				<p:messages autoUpdate="true" showDetail="true" closable="true" />
+				<p:messages id="messages" showDetail="true" autoUpdate="true"
+					closable="true" />
+				<h3>Nota:</h3>
+				<p>El archivo debe de tener las siguientes caracteristicas:</p>
+				<ul>
+					<li>Formato Microsoft Excel 97-2003 Worksheet (.xls)</li>
+					<li>No contener caracteres especiales <b>(&Ntilde; o
+							tildes)</b></li>
+				</ul>
+				<p:separator style="margin:20px;"/>
 				<h:panelGrid columns="2" width="60%">
 					<h:outputLabel value="Archivo a subir:" for="txtFile" />
-					<p:fileUpload value="#" mode="simple" skinSimple="true"
-						allowTypes="" invalidFileMessage="" invalidSizeMessage=""
-						label="Seleccionar" required="" requiredMessage="" sizeLimit="" />
-					<p:commandButton value="Enviar" ajax="false" action="#" />
+					<p:fileUpload mode="simple" value="#{dataloadMB.file}"
+						update="messages" id="txtFile" />
+					<p:commandButton value="Enviar"
+						actionListener="#{dataloadMB.upload}" ajax="false"
+						onclick="PF('statusDialog').show()" />
 				</h:panelGrid>
-
-				<p:panelGrid styleClass="summary">
-					<f:facet name="header">
-						<p:row>
-							<p:column colspan="4">
-								<h:outputText value="Historial" />
-							</p:column>
-						</p:row>
-					</f:facet>
-					<p:row>
-						<p:column>
-							<h:outputText
-								value="nombre de archivo: municipalidades ddjj 23-09-13" />
-						</p:column>
-						<p:column>
-							<h:outputText value="peso: 456 KB" />
-						</p:column>
-						<p:column>
-							<h:outputText value="Fecha: 28/08/2015" />
-						</p:column>
-						<p:column>
-							<p:link value="Restaurar" href="#" />
-						</p:column>
-					</p:row>
-				</p:panelGrid>
 			</p:panel>
 		</h:form>
+		<h:form id="recordForm" style="margin-top:50px;">
+			<p:dataTable id="recordTable" value="#{dataloadMB.files}" var="fil">
+				<p:column headerText="Nombre de archivo">
+					<h:outputText value="#{fil.nameOriginal}" />
+				</p:column>
+				<p:column headerText="Fecha de carga">
+					<h:outputText value="#{fil.createTime}" />
+				</p:column>
+				<p:column headerText="Usuario">
+					<h:outputText value="#{fil.user.username}" />
+				</p:column>
+				<p:column>
+					<p:commandLink value="Restaurar" action="#{dataloadMB.restoreFile}">
+						<f:setPropertyActionListener target="#{dataloadMB.restoreFileId}"
+							value="#{fil.idfilelog}" />
+					</p:commandLink>
+				</p:column>
+			</p:dataTable>
+		</h:form>
 
-<!-- 		<p:treeTable value="#{categoryCRUD.root}" var="cat" -->
-<!-- 			styleClass="categoryList" id="categoryTree"> -->
-<!-- 			<f:facet name="header">Listado de categorias</f:facet> -->
-<!-- 			<p:column> -->
-<!-- 				<f:facet name="header"> -->
-<!-- 					<h:outputText value="Categoria" /> -->
-<!-- 				</f:facet> -->
-<!-- 				<h:outputText value="#{cat.name}" /> -->
-<!-- 			</p:column> -->
-<!-- 		</p:treeTable> -->
+		<p:ajaxStatus onstart="PF('statusDialog').show()"
+			onsuccess="PF('statusDialog').hide()" />
+
+		<p:dialog widgetVar="statusDialog" modal="true" draggable="false"
+			closable="false" resizable="false" showHeader="true"
+			header="Procesando archivo">
+			<p:graphicImage value="img/gears.gif" />
+		</p:dialog>
+
 	</div>
 </h:body>
 </html>

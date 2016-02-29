@@ -13,7 +13,7 @@ public interface PServantDAO {
 	public List<Pservant> getServantsById(SortedSet<Integer> ids);
 	public Pservant getServantByFullName(String name, String lastname);
 	public List<Pservant> getServantByCategory(int category);
-	// public List<Pservant> getServantByCatMun(int category, int municipality);
 	public List<Pservant> getServantByEntity(Pservant pservant);
+	public List<Pservant> getServantByPosition(int position);
 
 }

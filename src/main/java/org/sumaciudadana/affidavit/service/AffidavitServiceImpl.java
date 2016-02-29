@@ -27,4 +27,9 @@ public class AffidavitServiceImpl implements AffidavitService {
 		return affidavitDAO.getAffidavitQuery(pservant);
 	}
 
+	@Override
+	public List<Affidavit> getAffidavitByPosition(int idposition) {
+		return affidavitDAO.getAffidavitByPosition(idposition);
+	}
+
 }

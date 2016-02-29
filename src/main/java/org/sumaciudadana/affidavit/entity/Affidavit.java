@@ -108,7 +108,7 @@ public class Affidavit {
 		this.idaffidavit = idaffidavit;
 	}
 
-	@ManyToOne(fetch = FetchType.LAZY)
+	@ManyToOne(fetch = FetchType.EAGER)
 	@JoinColumn(name = "idposition", nullable = false)
 	public Position getPosition() {
 		return this.idposition;

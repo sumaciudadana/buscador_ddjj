@@ -31,18 +31,27 @@
 </h:head>
 
 <h:body>
+
+<!-- 	<h:form> -->
+<!-- 		<h:outputText value="The parameter passed is: #{param.source}" /> -->
+<!-- 		<p:remoteCommand name="onload" action="#{affidavitQuery.checkUrl()}" -->
+<!-- 			autoRun="true"> -->
+<!-- 			<f:setPropertyActionListener value="#{param.source}" target="#{affidavitQuery.source}"/> -->
+<!-- 		</p:remoteCommand> -->
+<!-- 	</h:form> -->
+
 	<div class="wrapBuscador">
 
 		<h:panelGrid columns="1" width="100%">
 			<h:panelGroup>
 				<h:panelGrid columns="2" width="100%">
 					<h:form id="formRedirectTop">
-						<p:commandButton action="/index.xhtml?faces-redirect=true"
+						<p:commandButton action="#{affidavitQuery.returnHome}"
 							value="Regresar a la página de inicio" ajax="false" />
 					</h:form>
 					<p:commandButton value="Haga una denuncia an&oacute;nima"
 						styleClass="btnDenuncia"
-						onclick="javascript:showPopup('${request.contextPath}/faces/pages/denuncia.xhtml',630,660)"
+						onclick="javascript:showPopup('${request.contextPath}/faces/pages/denuncia.xhtml?selectedPservant=${affidavitQuery.selectedServant.idpservant}',630,660)"
 						ajax="true" type="button" />
 				</h:panelGrid>
 			</h:panelGroup>
@@ -73,6 +82,76 @@
 		<p:fieldset>
 			<div id="chart_div" style="width: 750px; height: 415px;"></div>
 		</p:fieldset>
+
+		<p:separator style="margin-top:40px;margin-bottom:40px;" />
+
+		<div id="summaryTable">
+			<p align="justify">NOTA 1: El c&aacute;lculo se realiza tomando
+				en cuenta la primera declaraci&oacute;n jurada registrada por la CGR
+				o la municipalidad y la &uacute;ltima declaraci&oacute;n jurada
+				registrada por CGR o la municipalidad correspondiente, durante todos
+				los a&ntilde;os de gesti&oacute;n del alcalde o la alcaldesa.</p>
+			<p align="justify">NOTA 2: En caso la CGR o la Municipalidad
+				registre dos declaraciones juradas presentadas el en el mismo
+				a&ntilde;o, para hacer el calculo se toma en consideracion la que
+				registra mayor valor.</p>
+
+			<p:panelGrid styleClass="summary">
+				<f:facet name="header">
+					<p:row>
+						<p:column colspan="2">
+							<h:outputText
+								value="Resumen estadistico de #{affidavitQuery.selectedServant.serFullName}" />
+						</p:column>
+					</p:row>
+				</f:facet>
+				<p:row>
+					<p:column>
+						<h:outputText value="Incumplimiento de declaraciones" />
+					</p:column>
+					<p:column>
+						<h:outputText value="#{affidavitQuery.affiFault.faultPorcentMsg}%" />
+					</p:column>
+				</p:row>
+				<p:row>
+					<p:column>
+						<h:outputText value="Incremento de ingresos mensuales" />
+					</p:column>
+					<p:column>
+						<h:outputText
+							value="#{affidavitQuery.incomeIncrement.incomeIncrement}" />
+					</p:column>
+				</p:row>
+				<p:row>
+					<p:column>
+						<h:outputText value="Incremento de patrimonio" />
+					</p:column>
+					<p:column>
+						<h:outputText
+							value="#{affidavitQuery.belongIncrement.patrimonyIncrement}" />
+					</p:column>
+				</p:row>
+				<p:row>
+					<p:column rowspan="2">
+						<h:outputText value="Bien de mayor valor declarado" />
+					</p:column>
+					<p:column>
+						<h:outputText
+							value="Bien: #{affidavitQuery.maxBelong.belongingType.desBelongingType}" />
+					</p:column>
+				</p:row>
+				<p:row>
+					<p:column>
+						<h:outputText
+							value="Valor: #{affidavitQuery.maxBelong.valueBelonging}">
+							<f:convertNumber type="currency" currencySymbol="S/." />
+						</h:outputText>
+					</p:column>
+				</p:row>
+			</p:panelGrid>
+		</div>
+
+		<p:separator style="margin-top:40px;margin-bottom:40px;" />
 
 		<!-- Accordion with affidavit results, one tab per year -->
 		<p:accordionPanel styleClass="affidavitResult">
@@ -246,12 +325,10 @@
 							</h:outputText>
 						</p:column>
 						<f:facet name="footer">
-							<div style="float: right;">
-								<h:outputText value="Total de Bienes: S/. " />
-								<h:outputText value="${res.affiTotalBelong}">
-									<f:convertNumber pattern="#,###,###" locale="US" />
-								</h:outputText>
-							</div>
+							<h:outputText value="Total de Bienes: S/. " />
+							<h:outputText value="${res.affiTotalBelong}">
+								<f:convertNumber pattern="#,###,###" locale="US" />
+							</h:outputText>
 						</f:facet>
 					</p:dataTable>
 
@@ -280,12 +357,10 @@
 							</h:outputText>
 						</p:column>
 						<f:facet name="footer">
-							<div style="float: right;">
-								<h:outputText value="Total de Otros: S/. " />
-								<h:outputText value="${res.affiTotalOtherIncome}">
-									<f:convertNumber pattern="#,###,###" locale="US" />
-								</h:outputText>
-							</div>
+							<h:outputText value="Total de Otros: S/. " />
+							<h:outputText value="${res.affiTotalOtherIncome}">
+								<f:convertNumber pattern="#,###,###" locale="US" />
+							</h:outputText>
 						</f:facet>
 					</p:dataTable>
 
@@ -307,72 +382,9 @@
 		<!-- Accordion end -->
 
 		<!-- Advance search integration -->
-		<p:separator id="separator"
-			style="margin-top:40px;margin-bottom:40px;" />
-		<p align="justify">NOTA 1: El c&aacute;lculo se realiza tomando en
-			cuenta la primera declaraci&oacute;n jurada registrada por la CGR o
-			la municipalidad y la &uacute;ltima declaraci&oacute;n jurada
-			registrada por CGR o la municipalidad correspondiente, durante todos
-			los a&ntilde;os de gesti&oacute;n del alcalde o la alcaldesa.</p>
-		<p align="justify">NOTA 2: En caso la CGR o la Municipalidad
-			registre dos declaraciones juradas presentadas el en el mismo
-			a&ntilde;o, para hacer el calculo se toma en consideracion la que
-			registra mayor valor.</p>
+		<p:separator style="margin-top:40px;margin-bottom:40px;" />
 
-		<div id="advanceSearchSummary">
-			<p:panelGrid styleClass="summary">
-				<f:facet name="header">
-					<p:row>
-						<p:column colspan="2">
-							<h:outputText
-								value="Resumen estadistico de #{affidavitQuery.selectedServant.serFullName}" />
-						</p:column>
-					</p:row>
-				</f:facet>
-				<p:row>
-					<p:column>
-						<h:outputText value="Incumplimiento de declaraciones" />
-					</p:column>
-					<p:column>
-						<h:outputText value="#{affidavitQuery.affiFault.faultPorcentMsg}%" />
-					</p:column>
-				</p:row>
-				<p:row>
-					<p:column>
-						<h:outputText value="Incremento de ingresos mensuales" />
-					</p:column>
-					<p:column>
-						<h:outputText
-							value="#{affidavitQuery.incomeIncrement.incomeIncrement}" />
-					</p:column>
-				</p:row>
-				<p:row>
-					<p:column>
-						<h:outputText value="Incremento de patrimonio" />
-					</p:column>
-					<p:column>
-						<h:outputText
-							value="#{affidavitQuery.belongIncrement.patrimonyIncrement}" />
-					</p:column>
-				</p:row>
-				<p:row>
-					<p:column rowspan="2">
-						<h:outputText value="Bien de mayor valor declarado" />
-					</p:column>
-					<p:column>
-						<h:outputText
-							value="Bien: #{affidavitQuery.maxBelong.belongingType.desBelongingType}" />
-					</p:column>
-				</p:row>
-				<p:row>
-					<p:column>
-						<h:outputText value="Valor: #{affidavitQuery.maxBelong.valueBelonging}">
-							<f:convertNumber type="currency" currencySymbol="S/." />
-						</h:outputText>
-					</p:column>
-				</p:row>
-			</p:panelGrid>
-
+		<div id="mapDiv">
 			<h:panelGroup id="mapPanel" style="margin-top:50px;">
 				<div id="textoMapa" style="margin: 0 auto;">
 					<h2>Explicaci&oacute;n del mapa</h2>
@@ -391,7 +403,7 @@
 
 		<h:panelGrid columns="2" width="100%" style="margin-top: 15px;">
 			<h:form id="formRedirect">
-				<p:commandButton action="/index.xhtml?faces-redirect=true"
+				<p:commandButton action="#{affidavitQuery.returnHome}"
 					value="Regresar a la página de inicio" ajax="false" />
 			</h:form>
 			<p:commandButton value="Haga una denuncia anónima"
@@ -403,8 +415,7 @@
 
 	<!-- SCRIPTS -->
 	<script language="JavaScript" type="text/javascript">
-		var dataString = "#{affidavitQuery.dataChart }";
-		console.log('data:'+dataString);
+		var dataString = "#{affidavitQuery.dataChart}";
 		google.load("visualization", "1", {
 			packages : [ "corechart" ]
 		});
@@ -442,58 +453,35 @@
 		
 		/* MAP CODE */
 		function initialize() {
+			
+			var dataMap = "#{affidavitQuery.dataMap}";
+			console.log("data: "+dataMap);
+			var dataArray = dataMap.split(';');
+			
 			var mapOptions = {
-				center : new google.maps.LatLng(-12.101827, -77.025321),
-				zoom : 16,
 				mapTypeId : google.maps.MapTypeId.ROADMAP
 			};
 			var map = new google.maps.Map(
 					document.getElementById("map-canvas"), mapOptions);
-
+			
 			var markers = [];
+			var bounds = new google.maps.LatLngBounds();
 
-			// test
-			var latLng = new google.maps.LatLng(-12.101827, -77.025321);
-			var marker = new google.maps.Marker({
-				'position' : latLng
+			dataArray.forEach(function(entry){
+				var coordinates = entry.split(',');
+				var latLng = new google.maps.LatLng(parseFloat(coordinates[0]),parseFloat(coordinates[1]));
+				var marker = new google.maps.Marker({
+					'position' : latLng
+				});
+				markers.push(marker);
+				bounds.extend(latLng);
 			});
-			markers.push(marker);
-			var marker = new google.maps.Marker({
-				'position' : latLng
-			});
-			markers.push(marker);
-			var marker = new google.maps.Marker({
-				'position' : latLng
-			});
-			markers.push(marker);
-			var marker = new google.maps.Marker({
-				'position' : latLng
-			});
-			markers.push(marker);
-			var marker = new google.maps.Marker({
-				'position' : latLng
-			});
-			markers.push(marker);
-			var marker = new google.maps.Marker({
-				'position' : latLng
-			});
-			markers.push(marker);
-			var marker = new google.maps.Marker({
-				'position' : latLng
-			});
-			markers.push(marker);
-			var marker = new google.maps.Marker({
-				'position' : latLng
-			});
-			markers.push(marker);
-			var marker = new google.maps.Marker({
-				'position' : latLng
-			});
-			markers.push(marker);
-			// end test
+			
+			map.fitBounds(bounds);
 
 			var markerCluster = new MarkerClusterer(map, markers);
 		}
+		
 		google.maps.event.addDomListener(window, 'load', initialize);
 	</script>
 

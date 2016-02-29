@@ -20,15 +20,10 @@
 		<h:form enctype="multipart/form-data">
 			<p:messages id="messages" showDetail="true" autoUpdate="true" closable="true" />  
 			<h:panelGrid columns="1">
-				<h:outputLabel
-					value="Indique el municipio al que refiere su denuncia:"
-					for="cmbMuni" />
-				<p:selectOneMenu id="cmbMuni"
-					value="#{participacionBean.selectedMunicipality}">
-					<f:selectItem itemLabel="NINGUNO" itemValue="NINGUNO" />
-					<f:selectItems value="#{participacionBean.municipalities}"
-						var="mun" itemLabel="#{mun.munName }" itemValue="#{mun.munName }" />
-				</p:selectOneMenu>
+			
+				<h:outputText value="Se realiza la denuncia a nombre del funcionario:" />
+				<h2>#{participacionBean.selectedPservantObject.serFullName}</h2>
+				
 				<br />
 				<h:outputLabel value="Escriba su denuncia:" for="txtDenuncia" />
 				<p:inputTextarea rows="6" cols="80"

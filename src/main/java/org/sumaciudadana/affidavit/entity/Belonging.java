@@ -30,6 +30,8 @@ public class Belonging {
 	private String detailBelonging;
 	private Long valueBelonging;
 	private String belongingSource;
+	private String coordinateLat;
+	private String coordinateLng;
 	private String userCreate;
 	private Date dateCreate;
 	private String userModify;
@@ -44,14 +46,17 @@ public class Belonging {
 
 	public Belonging(BelongingType belongingType, Affidavit affidavit,
 			String categoryBelonging, String desBelonging,
-			String detailBelonging, Long valueBelonging, String userCreate,
-			Date dateCreate, String userModify, Date dateModify) {
+			String detailBelonging, Long valueBelonging, String coordinateLat,
+			String coordinateLng, String userCreate, Date dateCreate,
+			String userModify, Date dateModify) {
 		this.belongingType = belongingType;
 		this.affidavit = affidavit;
 		this.categoryBelonging = categoryBelonging;
 		this.desBelonging = desBelonging;
 		this.detailBelonging = detailBelonging;
 		this.valueBelonging = valueBelonging;
+		this.coordinateLat = coordinateLat;
+		this.coordinateLng = coordinateLng;
 		this.userCreate = userCreate;
 		this.dateCreate = dateCreate;
 		this.userModify = userModify;
@@ -171,5 +176,25 @@ public class Belonging {
 	public void setBelongingSource(String belongingSource) {
 		this.belongingSource = belongingSource;
 	}
+
+	@Column(name = "coordinate_lat", length = 45)
+	public String getCoordinateLat() {
+		return coordinateLat;
+	}
+
+	public void setCoordinateLat(String coordinateLat) {
+		this.coordinateLat = coordinateLat;
+	}
+
+	@Column(name = "coordinate_lng", length = 45)
+	public String getCoordinateLng() {
+		return coordinateLng;
+	}
+
+	public void setCoordinateLng(String coordinateLng) {
+		this.coordinateLng = coordinateLng;
+	}
+	
+	
 
 }

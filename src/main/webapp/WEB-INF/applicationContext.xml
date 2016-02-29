@@ -23,6 +23,7 @@ http://www.springframework.org/schema/context/spring-context-3.0.xsd">
 	<bean id="belongingService"
 		class="org.sumaciudadana.affidavit.service.BelongingServiceImpl" />
 	<bean id="loginService" class="org.sumaciudadana.affidavit.service.LoginServiceImpl" />
+	<bean id="filelogService" class="org.sumaciudadana.affidavit.service.FilelogServiceImpl" />
 
 
 	<!--#Configuración del servicio de Spring: MailSernder -->
@@ -68,8 +69,8 @@ http://www.springframework.org/schema/context/spring-context-3.0.xsd">
 		<property name="driverClass" value="com.mysql.jdbc.Driver" />
 		<property name="jdbcUrl"
 			value="jdbc:mysql://localhost:3306/sumaciudadana?autoReconnect=true" />
-		<property name="user" value="root" />
-		<property name="password" value="root" />
+		<property name="user" value="" />
+		<property name="password" value="" />
 		<property name="maxPoolSize" value="10" />
 		<property name="maxStatements" value="0" />
 		<property name="minPoolSize" value="5" />

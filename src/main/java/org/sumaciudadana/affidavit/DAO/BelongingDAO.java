@@ -6,8 +6,9 @@ import org.sumaciudadana.affidavit.entity.Belonging;
 
 public interface BelongingDAO {
 
-	List<Belonging> getMaxBelong(int amount, int integer);
-	Belonging getMaxBelong(int idpservant);
-	List<Belonging> getAllBelongings();
+	public List<Belonging> getMaxBelong(int amount, int integer);
+	public Belonging getMaxBelong(int idpservant);
+	public List<Belonging> getAllBelongings();
+	public List<Belonging> getBellongingByAffi(int idAffidavit);
 
 }

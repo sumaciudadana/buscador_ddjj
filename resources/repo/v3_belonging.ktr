@@ -69,7 +69,7 @@
   <created_user>-</created_user>
   <created_date>2015&#x2f;10&#x2f;01 21&#x3a;38&#x3a;40.990</created_date>
   <modified_user>-</modified_user>
-  <modified_date>2015&#x2f;10&#x2f;01 21&#x3a;52&#x3a;43.212</modified_date>
+  <modified_date>2015&#x2f;11&#x2f;12 00&#x3a;41&#x3a;17.371</modified_date>
     <key_for_session_key>H4sIAAAAAAAAAAMAAAAAAAAAAAA&#x3d;</key_for_session_key>
     <is_key_private>N</is_key_private>
   </info>
@@ -250,7 +250,7 @@
     <accept_field/>
     <accept_stepname/>
     <file>
-      <name>C&#x3a;&#x5c;Users&#x5c;Cesar&#x5c;Desktop&#x5c;DDJJS DATOS FALSOS.xls</name>
+      <name>&#x2f;home&#x2f;ubuntu&#x2f;suma&#x2f;files&#x2f;&#x24;&#x7b;INPUTFILE&#x7d;.xls</name>
       <filemask/>
       <exclude_filemask/>
       <file_required>N</file_required>
@@ -453,8 +453,8 @@
     <spreadsheet_type>JXL</spreadsheet_type>
      <cluster_schema/>
  <remotesteps>   <input>   </input>   <output>   </output> </remotesteps>    <GUI>
-      <xloc>28</xloc>
-      <yloc>33</yloc>
+      <xloc>32</xloc>
+      <yloc>32</yloc>
       <draw>Y</draw>
       </GUI>
     </step>
@@ -1272,32 +1272,6 @@
     </step>
 
   <step>
-    <name>query position</name>
-    <type>TableInput</type>
-    <description/>
-    <distribute>Y</distribute>
-    <custom_distribution/>
-    <copies>1</copies>
-         <partitioning>
-           <method>none</method>
-           <schema_name/>
-           </partitioning>
-    <connection>local</connection>
-    <sql>select p.idposition, p.pos_name, j.idjurisdiction, j.jur_name, o.idorganization, o.org_name&#xd;&#xa;from position p, jurisdiction j, organization o&#xd;&#xa;where p.idjurisdiction &#x3d; j.idjurisdiction&#xd;&#xa;and j.idorganization &#x3d; o.idorganization&#x3b;</sql>
-    <limit>0</limit>
-    <lookup/>
-    <execute_each_row>N</execute_each_row>
-    <variables_active>N</variables_active>
-    <lazy_conversion_active>N</lazy_conversion_active>
-     <cluster_schema/>
- <remotesteps>   <input>   </input>   <output>   </output> </remotesteps>    <GUI>
-      <xloc>269</xloc>
-      <yloc>222</yloc>
-      <draw>Y</draw>
-      </GUI>
-    </step>
-
-  <step>
     <name>pservant</name>
     <type>TableInput</type>
     <description/>
@@ -1319,6 +1293,32 @@
  <remotesteps>   <input>   </input>   <output>   </output> </remotesteps>    <GUI>
       <xloc>27</xloc>
       <yloc>145</yloc>
+      <draw>Y</draw>
+      </GUI>
+    </step>
+
+  <step>
+    <name>query position</name>
+    <type>TableInput</type>
+    <description/>
+    <distribute>Y</distribute>
+    <custom_distribution/>
+    <copies>1</copies>
+         <partitioning>
+           <method>none</method>
+           <schema_name/>
+           </partitioning>
+    <connection>local</connection>
+    <sql>select p.idposition, p.pos_name, j.idjurisdiction, j.jur_name, o.idorganization, o.org_name&#xd;&#xa;from POSITION p, jurisdiction j, organization o&#xd;&#xa;where p.idjurisdiction &#x3d; j.idjurisdiction&#xd;&#xa;and j.idorganization &#x3d; o.idorganization&#x3b;</sql>
+    <limit>0</limit>
+    <lookup/>
+    <execute_each_row>N</execute_each_row>
+    <variables_active>N</variables_active>
+    <lazy_conversion_active>N</lazy_conversion_active>
+     <cluster_schema/>
+ <remotesteps>   <input>   </input>   <output>   </output> </remotesteps>    <GUI>
+      <xloc>269</xloc>
+      <yloc>222</yloc>
       <draw>Y</draw>
       </GUI>
     </step>

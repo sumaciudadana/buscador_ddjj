@@ -45,6 +45,10 @@ public class Pservant {
 
 	public Pservant() {
 	}
+	
+	public Pservant(Integer idpservant) {
+		this.idpservant = idpservant;
+	}
 
 	public Pservant(String serName, String serFirstsurname,
 			String serSecondsurname, String serDni, String serAddress,
